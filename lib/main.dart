@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'injection_container.dart' as di;
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/core_ui/presentation/providers/layout_provider.dart';
+import 'features/project/presentation/providers/project_provider.dart';
+import 'features/project/data/services/project_service.dart';
+
+late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize dependency injection
   await di.init();
+
+  // Initialize SharedPreferences
+  prefs = await SharedPreferences.getInstance();
 
   // Initialize desktop window manager
   await windowManager.ensureInitialized();
@@ -39,6 +48,7 @@ class FlutterDevAssistantApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LayoutProvider()),
+        ChangeNotifierProvider(create: (_) => ProjectProvider(ProjectService(), prefs)),
         // Add other providers here later from DI
       ],
       child: MaterialApp.router(

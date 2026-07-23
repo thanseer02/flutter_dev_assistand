@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import '../../../../project/presentation/providers/project_provider.dart';
 
 class TopToolbar extends StatelessWidget {
   const TopToolbar({super.key});
@@ -32,12 +35,16 @@ class TopToolbar extends StatelessWidget {
             // Project Info
             const Icon(LucideIcons.folder, size: 18),
             const SizedBox(width: 8),
-            const Text(
-              'My Flutter App',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+            Consumer<ProjectProvider>(
+              builder: (context, provider, child) {
+                return Text(
+                  provider.currentProject?.name ?? 'No Project Open',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                );
+              },
             ),
             
             const SizedBox(width: 24),
@@ -46,12 +53,22 @@ class TopToolbar extends StatelessWidget {
             IconButton(
               icon: const Icon(LucideIcons.folderOpen, size: 18),
               tooltip: 'Open Project',
-              onPressed: () {},
+              onPressed: () async {
+                final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+                if (directoryPath != null && context.mounted) {
+                  context.read<ProjectProvider>().openProject(directoryPath);
+                }
+              },
             ),
             IconButton(
               icon: const Icon(LucideIcons.refreshCw, size: 18),
               tooltip: 'Refresh',
-              onPressed: () {},
+              onPressed: () {
+                final provider = context.read<ProjectProvider>();
+                if (provider.currentProject != null) {
+                  provider.openProject(provider.currentProject!.path);
+                }
+              },
             ),
 
             const Spacer(),

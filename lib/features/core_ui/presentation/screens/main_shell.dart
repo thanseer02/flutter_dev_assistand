@@ -7,6 +7,7 @@ import '../widgets/top_toolbar.dart';
 import '../widgets/left_sidebar.dart';
 import '../widgets/right_panel.dart';
 import '../widgets/bottom_status_bar.dart';
+import '../../../../project/presentation/screens/dashboard_view.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -98,7 +99,11 @@ class _MainShellState extends State<MainShell> {
 
   Widget _buildCenterContent(SidebarItem item) {
     // Return appropriate view based on sidebar selection
-    // For now, returning a placeholder
+    if (item == SidebarItem.dashboard) {
+      return const DashboardView();
+    }
+    
+    // For now, returning a placeholder for others
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Center(

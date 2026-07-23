@@ -21,6 +21,7 @@ dependencies:
   window_manager: ^0.3.8
   multi_split_view: ^3.1.2
   lucide_icons: ^0.1.0
+  shared_preferences: ^2.2.2
   
   # File System & Utilities
   file_picker: ^6.1.1
