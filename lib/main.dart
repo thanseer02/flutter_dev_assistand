@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'injection_container.dart' as di;
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/core_ui/presentation/providers/layout_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +38,8 @@ class FlutterDevAssistantApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // Add providers here later from DI
-        Provider.value(value: 'placeholder'),
+        ChangeNotifierProvider(create: (_) => LayoutProvider()),
+        // Add other providers here later from DI
       ],
       child: MaterialApp.router(
         title: 'Flutter Dev Assistant',

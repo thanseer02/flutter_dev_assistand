@@ -8,6 +8,8 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
+      path: '/',
       builder: (context, state) => const MainShell(),
+    ),
   ],
 );
