@@ -15,6 +15,7 @@ import '../../../../features/imports/presentation/screens/imports_view.dart';
 import '../../../../features/performance/presentation/screens/performance_view.dart';
 import '../../../../features/ai_review/presentation/screens/ai_review_view.dart';
 import '../../../../features/release/presentation/screens/release_view.dart';
+import '../../../../features/apk_analyzer/presentation/screens/apk_analyzer_view.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -136,6 +137,10 @@ class _MainShellState extends State<MainShell> {
 
     if (item == SidebarItem.release) {
       return const ReleaseView();
+    }
+
+    if (item == SidebarItem.apkAnalyzer) {
+      return const ApkAnalyzerView();
     }
     
     // For now, returning a placeholder for others

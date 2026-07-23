@@ -10,6 +10,7 @@ enum SidebarItem {
   performance,
   aiReview,
   release,
+  apkAnalyzer,
   git,
   settings,
 }
