@@ -6,6 +6,7 @@ enum SidebarItem {
   assets,
   dependencies,
   analyzer,
+  imports,
   performance,
   git,
   settings,

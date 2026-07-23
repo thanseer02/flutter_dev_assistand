@@ -19,6 +19,7 @@ class LeftSidebar extends StatelessWidget {
           _buildSidebarItem(context, SidebarItem.assets, LucideIcons.image, 'Assets'),
           _buildSidebarItem(context, SidebarItem.dependencies, LucideIcons.package, 'Dependencies'),
           _buildSidebarItem(context, SidebarItem.analyzer, LucideIcons.activity, 'Analyzer'),
+          _buildSidebarItem(context, SidebarItem.imports, LucideIcons.gitMerge, 'Imports'),
           _buildSidebarItem(context, SidebarItem.performance, LucideIcons.zap, 'Performance'),
           _buildSidebarItem(context, SidebarItem.git, LucideIcons.gitBranch, 'Git'),
           
