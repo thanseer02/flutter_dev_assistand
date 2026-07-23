@@ -4,6 +4,7 @@ import 'package:window_manager/window_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import '../../../../project/presentation/providers/project_provider.dart';
+import '../../../../project_analysis/presentation/providers/analysis_provider.dart';
 
 class TopToolbar extends StatelessWidget {
   const TopToolbar({super.key});
@@ -56,17 +57,23 @@ class TopToolbar extends StatelessWidget {
               onPressed: () async {
                 final String? directoryPath = await FilePicker.platform.getDirectoryPath();
                 if (directoryPath != null && context.mounted) {
-                  context.read<ProjectProvider>().openProject(directoryPath);
+                  await context.read<ProjectProvider>().openProject(directoryPath);
+                  if (context.mounted) {
+                    context.read<AnalysisProvider>().scanProject(directoryPath);
+                  }
                 }
               },
             ),
             IconButton(
               icon: const Icon(LucideIcons.refreshCw, size: 18),
               tooltip: 'Refresh',
-              onPressed: () {
+              onPressed: () async {
                 final provider = context.read<ProjectProvider>();
                 if (provider.currentProject != null) {
-                  provider.openProject(provider.currentProject!.path);
+                  await provider.openProject(provider.currentProject!.path);
+                  if (context.mounted) {
+                    context.read<AnalysisProvider>().scanProject(provider.currentProject!.path);
+                  }
                 }
               },
             ),

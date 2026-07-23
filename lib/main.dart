@@ -9,6 +9,8 @@ import 'core/theme/app_theme.dart';
 import 'features/core_ui/presentation/providers/layout_provider.dart';
 import 'features/project/presentation/providers/project_provider.dart';
 import 'features/project/data/services/project_service.dart';
+import 'features/project_analysis/presentation/providers/analysis_provider.dart';
+import 'features/project_analysis/data/services/project_scanner_service.dart';
 
 late SharedPreferences prefs;
 
@@ -49,6 +51,7 @@ class FlutterDevAssistantApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LayoutProvider()),
         ChangeNotifierProvider(create: (_) => ProjectProvider(ProjectService(), prefs)),
+        ChangeNotifierProvider(create: (_) => AnalysisProvider(ProjectScannerService())),
         // Add other providers here later from DI
       ],
       child: MaterialApp.router(

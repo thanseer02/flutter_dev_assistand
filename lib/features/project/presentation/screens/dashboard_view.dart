@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/project_provider.dart';
+import '../../../../project_analysis/presentation/providers/analysis_provider.dart';
 import '../../domain/entities/project_info.dart';
 
 class DashboardView extends StatelessWidget {
@@ -70,7 +71,12 @@ class DashboardView extends StatelessWidget {
                   leading: const Icon(LucideIcons.folder, color: Colors.blue),
                   title: Text(path.split('/').last),
                   subtitle: Text(path, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                  onTap: () => provider.openProject(path),
+                  onTap: () async {
+                    await provider.openProject(path);
+                    if (context.mounted) {
+                      context.read<AnalysisProvider>().scanProject(path);
+                    }
+                  },
                 );
               },
             ),
@@ -111,16 +117,85 @@ class DashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          const Text('Architecture Detected', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text('Scan Results', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-          if (project.architectures.isEmpty)
-            const Text('No known state management detected.', style: TextStyle(color: Colors.grey))
-          else
-            Wrap(
-              spacing: 8,
-              children: project.architectures.map((arch) => Chip(label: Text(arch), backgroundColor: Colors.blue.withOpacity(0.1))).toList(),
-            ),
+          Consumer<AnalysisProvider>(
+            builder: (context, analysisProvider, child) {
+              if (analysisProvider.isScanning) {
+                return const Row(
+                  children: [
+                    SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                    SizedBox(width: 8),
+                    Text('Running deep scan...', style: TextStyle(color: Colors.grey)),
+                  ],
+                );
+              }
+              
+              if (analysisProvider.errorMessage != null) {
+                return Text(analysisProvider.errorMessage!, style: const TextStyle(color: Colors.red));
+              }
+
+              final analysis = analysisProvider.currentAnalysis;
+              if (analysis == null) {
+                return const Text('No deep scan data available.', style: TextStyle(color: Colors.grey));
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      _buildScanStat(context, 'Total Files', analysis.totalFiles.toString(), LucideIcons.files),
+                      const SizedBox(width: 16),
+                      _buildScanStat(context, 'Total Folders', analysis.totalFolders.toString(), LucideIcons.folder),
+                      const SizedBox(width: 16),
+                      _buildScanStat(context, 'Total Size', '${(analysis.totalSizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB', LucideIcons.hardDrive),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Top Extensions:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: analysis.filesByExtension.entries.map((e) {
+                      return Chip(
+                        label: Text('.${e.key} (${e.value.length})'),
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                      );
+                    }).toList(),
+                  )
+                ],
+              );
+            },
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildScanStat(BuildContext context, String title, String value, IconData icon) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border.all(color: Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: Colors.blue),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
