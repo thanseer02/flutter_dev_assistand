@@ -26,6 +26,7 @@ dependencies:
   image: ^4.1.7
   crypto: ^3.0.3
   csv: ^5.0.2
+  http: ^1.2.0
   
   # File System & Utilities
   file_picker: ^6.1.1
