@@ -8,6 +8,7 @@ enum SidebarItem {
   analyzer,
   imports,
   performance,
+  aiReview,
   git,
   settings,
 }

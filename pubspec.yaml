@@ -28,6 +28,7 @@ dependencies:
   csv: ^5.0.2
   http: ^1.2.0
   analyzer: ^6.4.1
+  google_generative_ai: ^0.4.6
   
   # File System & Utilities
   file_picker: ^6.1.1
