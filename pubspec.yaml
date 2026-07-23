@@ -29,6 +29,8 @@ dependencies:
   http: ^1.2.0
   analyzer: ^6.4.1
   google_generative_ai: ^0.4.6
+  pdf: ^3.10.8
+  printing: ^5.11.1
   
   # File System & Utilities
   file_picker: ^6.1.1

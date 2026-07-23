@@ -9,6 +9,7 @@ enum SidebarItem {
   imports,
   performance,
   aiReview,
+  release,
   git,
   settings,
 }

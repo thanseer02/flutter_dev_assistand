@@ -22,6 +22,7 @@ class LeftSidebar extends StatelessWidget {
           _buildSidebarItem(context, SidebarItem.imports, LucideIcons.gitMerge, 'Imports'),
           _buildSidebarItem(context, SidebarItem.performance, LucideIcons.zap, 'Performance'),
           _buildSidebarItem(context, SidebarItem.aiReview, LucideIcons.sparkles, 'AI Review'),
+          _buildSidebarItem(context, SidebarItem.release, LucideIcons.rocket, 'Release Readiness'),
           _buildSidebarItem(context, SidebarItem.git, LucideIcons.gitBranch, 'Git'),
           
           const Spacer(),

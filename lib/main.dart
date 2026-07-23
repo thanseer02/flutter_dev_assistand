@@ -23,6 +23,9 @@ import 'features/performance/presentation/providers/performance_provider.dart';
 import 'features/performance/data/services/performance_analyzer_service.dart';
 import 'features/ai_review/presentation/providers/ai_review_provider.dart';
 import 'features/ai_review/data/services/ai_review_service.dart';
+import 'features/release/presentation/providers/release_provider.dart';
+import 'features/release/data/services/release_analyzer_service.dart';
+import 'features/release/data/services/pdf_export_service.dart';
 
 late SharedPreferences prefs;
 
@@ -70,6 +73,7 @@ class FlutterDevAssistantApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ImportProvider(ImportAnalyzerService())),
         ChangeNotifierProvider(create: (_) => PerformanceProvider(PerformanceAnalyzerService())),
         ChangeNotifierProvider(create: (_) => AiReviewProvider(AiReviewService(), prefs)),
+        ChangeNotifierProvider(create: (_) => ReleaseProvider(ReleaseAnalyzerService(), PdfExportService())),
         // Add other providers here later from DI
       ],
       child: MaterialApp.router(
