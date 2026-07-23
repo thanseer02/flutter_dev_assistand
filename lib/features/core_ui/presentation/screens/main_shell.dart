@@ -12,6 +12,7 @@ import '../../../../features/assets/presentation/screens/assets_view.dart';
 import '../../../../features/dependencies/presentation/screens/dependencies_view.dart';
 import '../../../../features/code_analyzer/presentation/screens/analyzer_view.dart';
 import '../../../../features/imports/presentation/screens/imports_view.dart';
+import '../../../../features/performance/presentation/screens/performance_view.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -121,6 +122,10 @@ class _MainShellState extends State<MainShell> {
 
     if (item == SidebarItem.imports) {
       return const ImportsView();
+    }
+
+    if (item == SidebarItem.performance) {
+      return const PerformanceView();
     }
     
     // For now, returning a placeholder for others

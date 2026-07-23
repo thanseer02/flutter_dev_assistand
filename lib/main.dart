@@ -19,6 +19,8 @@ import 'features/code_analyzer/presentation/providers/code_analyzer_provider.dar
 import 'features/code_analyzer/data/services/code_analyzer_service.dart';
 import 'features/imports/presentation/providers/import_provider.dart';
 import 'features/imports/data/services/import_analyzer_service.dart';
+import 'features/performance/presentation/providers/performance_provider.dart';
+import 'features/performance/data/services/performance_analyzer_service.dart';
 
 late SharedPreferences prefs;
 
@@ -64,6 +66,7 @@ class FlutterDevAssistantApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DependencyProvider(PubspecAnalyzerService())),
         ChangeNotifierProvider(create: (_) => CodeAnalyzerProvider(CodeAnalyzerService())),
         ChangeNotifierProvider(create: (_) => ImportProvider(ImportAnalyzerService())),
+        ChangeNotifierProvider(create: (_) => PerformanceProvider(PerformanceAnalyzerService())),
         // Add other providers here later from DI
       ],
       child: MaterialApp.router(
