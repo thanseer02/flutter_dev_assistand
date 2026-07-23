@@ -1,0 +1,40 @@
+name: flutter_dev_assistant
+description: "A professional desktop application to assist Flutter developers."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Architecture & State Management
+  go_router: ^13.2.0
+  provider: ^6.1.1
+  get_it: ^7.6.4
+  equatable: ^2.0.5
+  
+  # Desktop Specific
+  window_manager: ^0.3.8
+  multi_split_view: ^3.1.2
+  lucide_icons: ^0.1.0
+  
+  # File System & Utilities
+  file_picker: ^6.1.1
+  path: ^1.9.0
+  path_provider: ^2.1.2
+  archive: ^3.4.9
+  collection: ^1.18.0
+  yaml: ^3.1.2
+  dart_style: ^2.3.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
