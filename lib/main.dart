@@ -11,6 +11,8 @@ import 'features/project/presentation/providers/project_provider.dart';
 import 'features/project/data/services/project_service.dart';
 import 'features/project_analysis/presentation/providers/analysis_provider.dart';
 import 'features/project_analysis/data/services/project_scanner_service.dart';
+import 'features/assets/presentation/providers/asset_provider.dart';
+import 'features/assets/data/services/asset_scanner_service.dart';
 
 late SharedPreferences prefs;
 
@@ -52,6 +54,7 @@ class FlutterDevAssistantApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LayoutProvider()),
         ChangeNotifierProvider(create: (_) => ProjectProvider(ProjectService(), prefs)),
         ChangeNotifierProvider(create: (_) => AnalysisProvider(ProjectScannerService())),
+        ChangeNotifierProvider(create: (_) => AssetProvider(AssetScannerService())),
         // Add other providers here later from DI
       ],
       child: MaterialApp.router(

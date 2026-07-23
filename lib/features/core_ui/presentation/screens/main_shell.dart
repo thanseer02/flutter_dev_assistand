@@ -7,7 +7,8 @@ import '../widgets/top_toolbar.dart';
 import '../widgets/left_sidebar.dart';
 import '../widgets/right_panel.dart';
 import '../widgets/bottom_status_bar.dart';
-import '../../../../project/presentation/screens/dashboard_view.dart';
+import '../../../../features/project/presentation/screens/dashboard_view.dart';
+import '../../../../features/assets/presentation/screens/assets_view.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -101,6 +102,10 @@ class _MainShellState extends State<MainShell> {
     // Return appropriate view based on sidebar selection
     if (item == SidebarItem.dashboard) {
       return const DashboardView();
+    }
+    
+    if (item == SidebarItem.assets) {
+      return const AssetsView();
     }
     
     // For now, returning a placeholder for others

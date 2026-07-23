@@ -23,6 +23,9 @@ dependencies:
   lucide_icons: ^0.1.0
   shared_preferences: ^2.2.2
   fl_chart: ^0.68.0
+  image: ^4.1.7
+  crypto: ^3.0.3
+  csv: ^5.0.2
   
   # File System & Utilities
   file_picker: ^6.1.1
