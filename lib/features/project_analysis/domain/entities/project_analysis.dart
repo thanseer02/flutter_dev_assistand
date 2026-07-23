@@ -2,6 +2,7 @@ import 'file_info.dart';
 
 class ProjectAnalysis {
   final Map<String, List<FileInfo>> filesByExtension;
+  final Map<String, int> folderSizes;
   final List<String> folders;
   final int totalFiles;
   final int totalFolders;
@@ -11,6 +12,7 @@ class ProjectAnalysis {
 
   const ProjectAnalysis({
     required this.filesByExtension,
+    required this.folderSizes,
     required this.folders,
     required this.totalFiles,
     required this.totalFolders,

@@ -17,6 +17,7 @@ class ProjectScannerService {
   // This method runs entirely on the background isolate
   static Future<ProjectAnalysis> _performScan(String projectPath, List<String> targetDirs) async {
     final Map<String, List<FileInfo>> filesByExtension = {};
+    final Map<String, int> folderSizes = {};
     final List<String> folders = [];
     int totalFiles = 0;
     int totalFolders = 0;
@@ -28,6 +29,7 @@ class ProjectScannerService {
       for (final dirName in targetDirs) {
         final targetDir = Directory('${rootDir.path}/$dirName');
         if (targetDir.existsSync()) {
+          int currentFolderSize = 0;
           final entities = targetDir.listSync(recursive: true, followLinks: false);
           
           for (final entity in entities) {
@@ -58,11 +60,13 @@ class ProjectScannerService {
                 
                 totalFiles++;
                 totalSizeInBytes += stat.size;
+                currentFolderSize += stat.size;
               } catch (_) {
                 // Ignore files that can't be read (permissions, etc.)
               }
             }
           }
+          folderSizes[dirName] = currentFolderSize;
         }
       }
     }
@@ -89,6 +93,7 @@ class ProjectScannerService {
 
     return ProjectAnalysis(
       filesByExtension: filesByExtension,
+      folderSizes: folderSizes,
       folders: folders,
       totalFiles: totalFiles,
       totalFolders: totalFolders,

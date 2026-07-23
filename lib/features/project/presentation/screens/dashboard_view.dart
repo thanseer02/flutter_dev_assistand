@@ -4,6 +4,12 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/project_provider.dart';
 import '../../../../project_analysis/presentation/providers/analysis_provider.dart';
 import '../../domain/entities/project_info.dart';
+import '../../../../project_analysis/domain/entities/project_analysis.dart';
+
+import '../widgets/stat_card.dart';
+import '../widgets/charts/files_by_extension_chart.dart';
+import '../widgets/charts/folder_sizes_chart.dart';
+import '../widgets/charts/project_timeline_chart.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -12,13 +18,14 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final projectProvider = context.watch<ProjectProvider>();
     final project = projectProvider.currentProject;
+    final analysisProvider = context.watch<AnalysisProvider>();
 
     if (projectProvider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (project != null) {
-      return _buildProjectDashboard(context, project);
+      return _buildProjectDashboard(context, project, analysisProvider);
     }
 
     return _buildNoProjectView(context, projectProvider);
@@ -86,7 +93,9 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildProjectDashboard(BuildContext context, ProjectInfo project) {
+  Widget _buildProjectDashboard(BuildContext context, ProjectInfo project, AnalysisProvider analysisProvider) {
+    final analysis = analysisProvider.currentAnalysis;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -94,116 +103,158 @@ class DashboardView extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(LucideIcons.box, size: 32, color: Colors.blue),
-              const SizedBox(width: 16),
-              Text(
-                project.name,
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              const Icon(LucideIcons.activity, size: 28, color: Colors.blue),
+              const SizedBox(width: 12),
+              const Text(
+                'Dashboard',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(project.path, style: const TextStyle(color: Colors.grey)),
-          const SizedBox(height: 32),
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            children: [
-              _buildStatCard(context, 'Flutter Version', project.flutterVersion, LucideIcons.smartphone),
-              _buildStatCard(context, 'Dart SDK', project.dartVersion, LucideIcons.code),
-              _buildStatCard(context, 'Dart Files', project.dartFilesCount.toString(), LucideIcons.fileCode),
-              _buildStatCard(context, 'Assets', project.assetsCount.toString(), LucideIcons.image),
-              _buildStatCard(context, 'Packages', project.packagesCount.toString(), LucideIcons.package),
-            ],
-          ),
-          const SizedBox(height: 32),
-          const Text('Scan Results', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          Consumer<AnalysisProvider>(
-            builder: (context, analysisProvider, child) {
-              if (analysisProvider.isScanning) {
-                return const Row(
+              const Spacer(),
+              if (analysisProvider.isScanning)
+                const Row(
                   children: [
                     SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
                     SizedBox(width: 8),
-                    Text('Running deep scan...', style: TextStyle(color: Colors.grey)),
+                    Text('Scanning...', style: TextStyle(color: Colors.grey)),
                   ],
-                );
-              }
-              
-              if (analysisProvider.errorMessage != null) {
-                return Text(analysisProvider.errorMessage!, style: const TextStyle(color: Colors.red));
-              }
-
-              final analysis = analysisProvider.currentAnalysis;
-              if (analysis == null) {
-                return const Text('No deep scan data available.', style: TextStyle(color: Colors.grey));
-              }
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _buildScanStat(context, 'Total Files', analysis.totalFiles.toString(), LucideIcons.files),
-                      const SizedBox(width: 16),
-                      _buildScanStat(context, 'Total Folders', analysis.totalFolders.toString(), LucideIcons.folder),
-                      const SizedBox(width: 16),
-                      _buildScanStat(context, 'Total Size', '${(analysis.totalSizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB', LucideIcons.hardDrive),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  const Text('Top Extensions:', style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: analysis.filesByExtension.entries.map((e) {
-                      return Chip(
-                        label: Text('.${e.key} (${e.value.length})'),
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                      );
-                    }).toList(),
-                  )
-                ],
+                ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          
+          // Animated Grid of Stat Cards
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: child,
+                ),
               );
             },
+            child: _buildCardsGrid(project, analysis),
           ),
+
+          const SizedBox(height: 32),
+          
+          // Charts Section
+          if (analysis != null) ...[
+            const Text('Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 800),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, 20 * (1 - value)),
+                    child: child,
+                  ),
+                );
+              },
+              child: _buildChartsGrid(context, analysis),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildScanStat(BuildContext context, String title, String value, IconData icon) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          border: Border.all(color: Theme.of(context).dividerColor),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
+  Widget _buildCardsGrid(ProjectInfo project, ProjectAnalysis? analysis) {
+    // Determine Project Health
+    String health = 'Good';
+    Color healthColor = Colors.green;
+    if (analysis != null && analysis.analysisOptions.isEmpty) {
+      health = 'Warning (No lints)';
+      healthColor = Colors.orange;
+    }
+
+    final String sizeStr = analysis != null 
+        ? '${(analysis.totalSizeInBytes / 1024 / 1024).toStringAsFixed(1)} MB' 
+        : '...';
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount = constraints.maxWidth > 1200 ? 4 : (constraints.maxWidth > 800 ? 3 : 2);
+        
+        return GridView.count(
+          crossAxisCount: crossAxisCount,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 2.2, // Adjust card ratio
           children: [
-            Icon(icon, size: 20, color: Colors.blue),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              ],
-            )
+            StatCard(title: 'Project Health', value: health, icon: LucideIcons.heartPulse, color: healthColor),
+            StatCard(title: 'Flutter Version', value: project.flutterVersion, icon: LucideIcons.smartphone, color: Colors.blue),
+            StatCard(title: 'Dart Version', value: project.dartVersion, icon: LucideIcons.code, color: Colors.blueAccent),
+            StatCard(title: 'Package Count', value: project.packagesCount.toString(), icon: LucideIcons.package, color: Colors.purple),
+            StatCard(title: 'Assets', value: analysis != null ? (analysis.folders.where((f) => f.contains('assets')).length.toString()) : project.assetsCount.toString(), icon: LucideIcons.image, color: Colors.orange),
+            StatCard(title: 'Dart Files', value: analysis != null ? (analysis.filesByExtension['dart']?.length.toString() ?? '0') : project.dartFilesCount.toString(), icon: LucideIcons.fileCode, color: Colors.teal),
+            StatCard(title: 'Project Size', value: sizeStr, icon: LucideIcons.hardDrive, color: Colors.redAccent),
+            StatCard(title: 'Latest Scan', value: analysis != null ? 'Just now' : 'Pending', icon: LucideIcons.clock, color: Colors.grey),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon) {
+  Widget _buildChartsGrid(BuildContext context, ProjectAnalysis analysis) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isWide = constraints.maxWidth > 900;
+        
+        return Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: _buildChartContainer(
+                    context, 
+                    'Files by Extension', 
+                    FilesByExtensionChart(data: analysis.filesByExtension.map((k, v) => MapEntry(k, v.length))),
+                  ),
+                ),
+                if (isWide) const SizedBox(width: 16),
+                if (isWide)
+                  Expanded(
+                    child: _buildChartContainer(
+                      context, 
+                      'Folder Sizes', 
+                      FolderSizesChart(data: analysis.folderSizes),
+                    ),
+                  ),
+              ],
+            ),
+            if (!isWide) const SizedBox(height: 16),
+            if (!isWide)
+              _buildChartContainer(
+                context, 
+                'Folder Sizes', 
+                FolderSizesChart(data: analysis.folderSizes),
+              ),
+            const SizedBox(height: 16),
+            _buildChartContainer(
+              context, 
+              'Project Timeline (Last 30 Days)', 
+              ProjectTimelineChart(filesByExtension: analysis.filesByExtension),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildChartContainer(BuildContext context, String title, Widget chart) {
     return Container(
-      width: 200,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
@@ -212,18 +263,9 @@ class DashboardView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 16, color: Colors.grey),
-              const SizedBox(width: 8),
-              Text(title, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 24),
+          chart,
         ],
       ),
     );
