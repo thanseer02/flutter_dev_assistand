@@ -10,6 +10,7 @@ import '../widgets/bottom_status_bar.dart';
 import '../../../../features/project/presentation/screens/dashboard_view.dart';
 import '../../../../features/assets/presentation/screens/assets_view.dart';
 import '../../../../features/dependencies/presentation/screens/dependencies_view.dart';
+import '../../../../features/code_analyzer/presentation/screens/analyzer_view.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -111,6 +112,10 @@ class _MainShellState extends State<MainShell> {
 
     if (item == SidebarItem.dependencies) {
       return const DependenciesView();
+    }
+
+    if (item == SidebarItem.analyzer) {
+      return const AnalyzerView();
     }
     
     // For now, returning a placeholder for others
