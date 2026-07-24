@@ -1,3 +1,4 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/asset_provider.dart';
 import '../../domain/entities/asset_issue.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class AssetsView extends StatelessWidget {
   const AssetsView({super.key});

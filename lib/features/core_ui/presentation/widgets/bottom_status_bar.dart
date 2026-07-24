@@ -1,8 +1,8 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import '../providers/layout_provider.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class BottomStatusBar extends StatelessWidget {
   const BottomStatusBar({super.key});

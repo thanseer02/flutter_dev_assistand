@@ -1,9 +1,9 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/code_analyzer_provider.dart';
 import '../../domain/entities/analyzer_result.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class AnalyzerView extends StatelessWidget {
   const AnalyzerView({super.key});

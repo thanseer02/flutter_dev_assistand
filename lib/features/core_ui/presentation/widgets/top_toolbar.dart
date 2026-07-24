@@ -1,10 +1,10 @@
+import 'package:flutter_dev_assistant/features/project_analysis/presentation/providers/analysis_provider.dart';
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
-import '../../../../project_analysis/presentation/providers/analysis_provider.dart';
 
 class TopToolbar extends StatelessWidget {
   const TopToolbar({super.key});

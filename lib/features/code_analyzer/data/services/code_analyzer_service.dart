@@ -151,7 +151,6 @@ class _DuplicateVisitor extends RecursiveAstVisitor<void> {
       final location = '$filePath:${node.offset}';
       stringLiterals.putIfAbsent(val, () => []).add(location);
     }
-    super.visitStringLiteral(node);
   }
 
   String _normalizeSyntax(String source) {

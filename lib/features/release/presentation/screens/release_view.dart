@@ -1,10 +1,10 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/release_provider.dart';
 import '../../domain/entities/release_check.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class ReleaseView extends StatelessWidget {
   const ReleaseView({super.key});

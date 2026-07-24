@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/project_provider.dart';
-import '../../../../project_analysis/presentation/providers/analysis_provider.dart';
+import '../../../project_analysis/presentation/providers/analysis_provider.dart';
 import '../../domain/entities/project_info.dart';
-import '../../../../project_analysis/domain/entities/project_analysis.dart';
+import '../../../project_analysis/domain/entities/project_analysis.dart';
 
 import '../widgets/stat_card.dart';
 import '../widgets/charts/files_by_extension_chart.dart';

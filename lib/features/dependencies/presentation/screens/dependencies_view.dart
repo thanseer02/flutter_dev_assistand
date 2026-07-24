@@ -1,10 +1,10 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:file_picker/file_picker.dart';
 import '../providers/dependency_provider.dart';
 import '../../domain/entities/package_info.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class DependenciesView extends StatelessWidget {
   const DependenciesView({super.key});

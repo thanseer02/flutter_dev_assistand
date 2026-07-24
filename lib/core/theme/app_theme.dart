@@ -43,7 +43,7 @@ class AppTheme {
         bodySmall: TextStyle(color: Color(0xFF999999)),
       ),
       // Set default rounding for modern look
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

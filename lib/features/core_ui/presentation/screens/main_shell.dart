@@ -32,9 +32,9 @@ class _MainShellState extends State<MainShell> {
     super.initState();
     _splitViewController = MultiSplitViewController(
       areas: [
-        Area(weight: 0.15, minimalSize: 200), // Left sidebar/explorer equivalent
-        Area(weight: 0.65, minimalSize: 400), // Center area
-        Area(weight: 0.20, minimalSize: 200), // Right panel
+        Area(flex: 0.15, min: 200), // Left sidebar/explorer equivalent
+        Area(flex: 0.65, min: 400), // Center area
+        Area(flex: 0.20, min: 200), // Right panel
       ],
     );
   }
@@ -66,11 +66,11 @@ class _MainShellState extends State<MainShell> {
                       List<Widget> activeWidgets = [];
 
                       // Always have a center area (Dashboard, Project, etc. based on selection)
-                      activeAreas.add(Area(weight: provider.isRightPanelVisible ? 0.7 : 1.0, minimalSize: 400));
+                      activeAreas.add(Area(flex: provider.isRightPanelVisible ? 0.7 : 1.0, min: 400));
                       activeWidgets.add(_buildCenterContent(provider.selectedSidebarItem));
 
                       if (provider.isRightPanelVisible) {
-                        activeAreas.add(Area(weight: 0.3, minimalSize: 200));
+                        activeAreas.add(Area(flex: 0.3, min: 200));
                         activeWidgets.add(const RightPanel());
                       }
 
@@ -90,7 +90,7 @@ class _MainShellState extends State<MainShell> {
                         ),
                         child: MultiSplitView(
                           controller: _splitViewController,
-                          children: activeWidgets,
+                          builder: (BuildContext context, Area area) => activeWidgets[area.index],
                         ),
                       );
                     },

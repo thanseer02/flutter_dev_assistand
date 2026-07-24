@@ -1,9 +1,9 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/performance_provider.dart';
 import '../../domain/entities/performance_issue.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 
 class PerformanceView extends StatelessWidget {
   const PerformanceView({super.key});

@@ -4,6 +4,9 @@ import '../../domain/entities/project_info.dart';
 import '../../data/services/project_service.dart';
 
 class ProjectProvider extends ChangeNotifier {
+  List<String> get recentProjects => [_prefs.getString('recent_project_path') ?? ''].where((s) => s.isNotEmpty).toList();
+  Future<void> openProject(String path) => scanProject(path);
+
   final ProjectService _projectService;
   final SharedPreferences _prefs;
 

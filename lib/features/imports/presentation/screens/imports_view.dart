@@ -1,9 +1,9 @@
+import 'package:flutter_dev_assistant/features/project/presentation/providers/project_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/import_provider.dart';
 import '../../domain/entities/import_analysis.dart';
-import '../../../../project/presentation/providers/project_provider.dart';
 import '../widgets/dependency_graph_painter.dart';
 
 class ImportsView extends StatelessWidget {
